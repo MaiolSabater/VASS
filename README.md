@@ -29,7 +29,7 @@ VASS is a fully local, always-listening voice assistant. Say **"What's up Vass"*
 ### 1. Clone and install Python dependencies
 
 ```bash
-git clone https://github.com/<your-username>/VASS.git
+git clone https://github.com/MaiolSabater/VASS.git
 cd VASS
 python -m venv .venv
 .venv\Scripts\activate
