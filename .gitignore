@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+
+# NVIDIA CUDA/cuDNN runtime DLLs (~1.8 GB, NVIDIA-licensed) — see README
+libs/
+
+# Piper voice models (large binaries) — download separately, see README
+voices/**/*.onnx
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.wav
