@@ -12,6 +12,8 @@ if hasattr(sys.stdout, "reconfigure"):
 import queue
 import threading
 
+import llm
+import stt
 import wake
 from handler import handle
 from tts import speak
@@ -164,6 +166,13 @@ def _converse() -> None:
 
 
 def main() -> None:
+    # load every model up front so the first conversation isn't slow
+    print("Warming up models…")
+    stt.warm_up()
+    llm.warm_up()
+    detector = wake.WakeWordDetector()
+    print("Ready.\n")
+
     print(
         "Vass is listening for \"what's up Vass\" — or press Enter to talk. "
         "Type 'quit' to exit.\n"
@@ -171,8 +180,6 @@ def main() -> None:
 
     trigger_queue: "queue.Queue[str]" = queue.Queue()
     threading.Thread(target=_keypress_thread, args=(trigger_queue,), daemon=True).start()
-
-    detector = wake.WakeWordDetector()
 
     while True:
         # ── wait for trigger ──────────────────────────────────────────────────

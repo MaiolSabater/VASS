@@ -16,6 +16,7 @@ VASS is a fully local, always-listening voice assistant. Say **"What's up Vass"*
 - **Natural speech output** with Piper TTS.
 - **Conversation mode.** After the wake word you can keep talking without re-triggering it. A session ends after a silence timeout or when you say a closing phrase like "thanks Vass" or "that's all".
 - **Keyboard fallback.** Press Enter instead of saying the wake word.
+- **LED strip control.** Controls a HappyLighting BLE strip by voice, answered instantly without the LLM (see [LED strip](#led-strip)).
 
 ## Requirements
 
@@ -77,6 +78,19 @@ python main.py
 3. Keep talking for follow-ups. End the session with "thanks Vass", "that's all", "goodbye", or just stay quiet for 25 s.
 4. Type `quit` (or `exit`, `q`, `bye`) and press Enter to close the program.
 
+### LED strip
+
+Commands must mention "lights" (or "LEDs"):
+
+| Say | Effect |
+|---|---|
+| "connect to the lights" | Connects; Vass says "Connected to lights." or "Connection to the lights failed." |
+| "set the lights to red" | Powers on and sets the color (red, green, blue, white, warm white, yellow, orange, purple, pink, magenta, cyan, turquoise, light blue, dark blue) |
+| "turn on the lights" / "turn off the lights" | Power on (restores the last color) / standby (this controller shows a dim blue glow when off) |
+| "disconnect the lights" | Releases the strip, so the phone app can connect |
+
+The connection stays open between commands and reconnects automatically if it drops. The strip accepts only one connection, so close the HappyLighting app first. Set the strip's address in `config.py` (`LIGHTS_ADDRESS`); find it with `python light.py scan`.
+
 ### Test modes
 
 Each component can run on its own:
@@ -85,6 +99,7 @@ Each component can run on its own:
 |---|---|
 | `python wake.py` | Prints live wake-word scores. Use it to tune `WAKE_THRESHOLD`. |
 | `python stt.py` | Push-to-talk transcription test (press Enter to stop recording). |
+| `python light.py scan` / `test` | Finds the LED strip and cycles its colors (see the script's docstring for more). |
 
 ## Configuration
 
@@ -114,7 +129,9 @@ VASS/
 ├── main.py              # Entry point: trigger loop + conversation sessions
 ├── wake.py              # Wake-word detection (openWakeWord)
 ├── stt.py               # Mic capture, Silero VAD, faster-whisper transcription
-├── handler.py           # handle(): dispatch seam / future intent router
+├── handler.py           # handle(): routes light commands, everything else to the LLM
+├── lights.py            # BLE LED strip control used by VASS
+├── light.py             # Standalone LED strip scan/test tool
 ├── llm.py               # Ollama chat client
 ├── tts.py               # Piper synthesis + playback
 ├── config.py            # All tunable settings

@@ -197,6 +197,13 @@ def record_with_vad(timeout: float | None = None) -> np.ndarray:
     return (audio_int16.astype(np.float32) / 32768.0)
 
 
+def warm_up() -> None:
+    """Load Whisper + Silero VAD now instead of on the first utterance, and run
+    one dummy transcription so CUDA kernels are initialised before real use."""
+    _get_vad()
+    transcribe(np.zeros(SAMPLE_RATE, dtype=np.float32))   # 1 s of silence
+
+
 def transcribe(audio: np.ndarray) -> str:
     """Transcribe a 1-D float32 audio array sampled at 16 kHz."""
     if audio.size == 0:

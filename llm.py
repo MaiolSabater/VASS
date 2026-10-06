@@ -14,6 +14,19 @@ def _get_client() -> OpenAI:
     return _client
 
 
+def warm_up() -> None:
+    """Send a 1-token request so Ollama loads the model into memory at startup
+    rather than on the first real question."""
+    try:
+        _get_client().chat.completions.create(
+            model=config.OLLAMA_MODEL,
+            messages=[{"role": "user", "content": "hi"}],
+            max_tokens=1,
+        )
+    except (APIConnectionError, APIStatusError) as e:
+        print(f"[LLM] Warm-up failed ({e}) — will retry on first question.")
+
+
 def query_llm(text: str, history: list) -> str:
     history.append({"role": "user", "content": text})
     try:

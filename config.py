@@ -45,6 +45,12 @@ CONVERSATION_END_PHRASES = [
 # Spoken sign-off played when a close phrase ends the conversation
 CONVERSATION_END_ACK = "later!"
 
+# ── BLE LED strip (lights.py) ────────────────────────────────────────────────────
+# Found with `python light.py scan`; the HappyLighting app must be closed while VASS uses it
+LIGHTS_ADDRESS          = "69:AB:00:CE:5C:8A"   # QHM-5C8A
+LIGHTS_WRITE_CHAR       = "0000ffd9-0000-1000-8000-00805f9b34fb"
+LIGHTS_CONNECT_TIMEOUT  = 15.0   # seconds
+
 # ── Assistant behaviour ───────────────────────────────────────────────────────
 SYSTEM_PROMPT = (
     "You are Vass, Maiol's voice assistant and friend who hangs out in his room. "

@@ -5,3 +5,4 @@ soundfile>=0.12
 openwakeword>=0.6
 onnxruntime>=1.16
 faster-whisper>=1.0
+bleak>=0.22
